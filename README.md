@@ -1,7 +1,7 @@
 # AFC - Blockchain Technologies 
-## Final Project [2021-2022]
 
-## Covid-19 Supply Chain
+**Final Project [2021-2022]**
+**Covid-19 Supply Chain**
 
 ## Deliverables
 Contatins the UML diagrams, the presentation and the final report
