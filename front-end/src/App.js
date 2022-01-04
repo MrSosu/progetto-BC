@@ -4,6 +4,16 @@ import './App.css'
 import CovidSupplyChain from "./CovidSupplyChain.json";
 
 
+import { Routes, Route, Link } from "react-router-dom";
+
+import CourierPage from './pages/Courier';
+import FacilityPage from './pages/Facilities';
+import HubPage from './pages/Hub';
+import ManufacturerPage from './pages/Manufacturer';
+import HomePage from './pages/Home';
+import TestPage from './pages/test';
+
+
 class App extends Component {
 
   state = {account:"", loaded:false};
@@ -33,7 +43,7 @@ class App extends Component {
         CovidSupplyChain.networks[networkId] && CovidSupplyChain.networks[networkId].address 
       );
 
-      this.res = await this.CovidSupplyChain.methods.getActor(this.state.account).call();
+    
      
       this.setState({loaded:true});
       
@@ -69,31 +79,26 @@ class App extends Component {
     }
 
     return (
+
+
       <div class="container">
-        <h1>Covid-19 Supply Chain</h1>
-        <p>Selected Account: {this.state.account}</p>
+        <div class="navbar">
+          <h1>Covid-19 Supply Chain</h1>
+          <p>Account: {this.state.account}</p>
+        </div>
 
-        <p id="titolo" > Add actor:</p>
-        Your Name: <input type="text" name="cost" value={this.name} onChange={this.onNameChange}/> <br></br><br></br>
-
-
-        <form onSubmit={this.formSubmit}>
-          <input type="radio" value="0" name="actor" onChange={this.onActorChange}/> Manufacturer<br></br>
-          <input type="radio" value="1" name="actor" onChange={this.onActorChange}/> Courier<br></br>
-          <input type="radio" value="2" name="actor" onChange={this.onActorChange}/> National Storage Facility<br></br>
-          <input type="radio" value="3" name="actor" onChange={this.onActorChange}/> Regional Storage Facility<br></br>
-          <input type="radio" value="4" name="actor" onChange={this.onActorChange}/> Vaccination Hub<br></br>
-
-          <button type="button" onClick={this.onSubmitForm}>Add Actor</button>
-        </form>
-
-        <br></br>
-        <p id="titolo" >Your record on chain as actor is:</p>
-        <p> Your Address:<b> {this.res[0]} </b><br></br>
-        Your String Name: <b>{this.res[1]} </b><br></br>
-        Your Role: <b>{this.getRole(this.res[2])}</b></p>
+          <Routes>
+            <Route exact path="/" element={<HomePage/>}> </Route>         
+            <Route exact path="/manufacturer" element={<ManufacturerPage/>} > </Route>   
+            <Route exact path="/hub" element={<HubPage/>} > </Route>   
+            <Route exact path="/facility" element={<FacilityPage/>}> </Route>   
+            <Route exact path="/courier" element={<CourierPage/>} > </Route>
+            <Route exact path="/test" element={<TestPage/>} > </Route>    
+          </Routes>
 
       </div>
+
+      
     );
   }
 
