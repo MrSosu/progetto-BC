@@ -7906,12 +7906,12 @@
     "1337": {
       "events": {},
       "links": {},
-      "address": "0xfB73F125e0Ac4e590C85bEC6d11FeC4d5E3BaeDc",
-      "transactionHash": "0x50c67490c673e554681f0eadd7887c3f29468e11e1d6c7960da0f874ff23f861"
+      "address": "0x1D5c2ffCe256Db97C949A32d3820690cd86E4408",
+      "transactionHash": "0x510c5eb0301c30e9fa9b82628133aa60b20e8b5ae2124bc5a7776613b3154813"
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2022-01-04T00:21:09.303Z",
+  "updatedAt": "2022-01-05T09:53:03.785Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

@@ -20,13 +20,6 @@ class App extends Component {
 
   constructor() {
     super();
-
-    this.actor = 1;
-    this.actor_name = "";
-
-    this.onActorChange = this.onActorChange.bind(this);
-    this.onNameChange = this.onNameChange.bind(this);
-    this.onSubmitForm = this.onSubmitForm.bind(this);
   }
 
   componentDidMount = async () => {
@@ -43,8 +36,6 @@ class App extends Component {
         CovidSupplyChain.networks[networkId] && CovidSupplyChain.networks[networkId].address 
       );
 
-    
-     
       this.setState({loaded:true});
       
     } catch (error) {
@@ -54,23 +45,6 @@ class App extends Component {
 
   }
 
-
-  onSubmitForm = async () => {
-    console.log(this.actor_name,this.role);
-    let result = await this.CovidSupplyChain.methods.addActor(this.actor_name,this.role).send({ from: this.state.account });
-    console.log(result);
-  };
-
-  onActorChange = (event) => {this.role= event.target.value;}
-  onNameChange = (event) => {this.actor_name= event.target.value;}
-
-  getRole( num) {
-    if (num==0) {return "Manufacturer";}
-    if (num==1) {return "Courier";}
-    if (num==2) {return "National Storage Facility";}
-    if (num==3) {return "Regional Storage Facility";}
-    if (num==4) {return "Vaccination Hub";}
-  }
 
   render() {
 

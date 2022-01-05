@@ -31,6 +31,7 @@ class TestPage extends Component {
         CovidSupplyChain.networks[networkId] && CovidSupplyChain.networks[networkId].address 
       );
 
+      //chiamata in lettura .call()
       this.res = await this.CovidSupplyChain.methods.getActor(this.state.account).call();
       
       this.setState({loaded:true});
@@ -44,8 +45,10 @@ class TestPage extends Component {
 
   onSubmitForm = async () => {
     console.log(this.actor_name,this.role);
+
+    //chiamata in scrittura .send(indirizzo mittente) 
     let result = await this.CovidSupplyChain.methods.addActor(this.actor_name,this.role).send({ from: this.state.account });
-    console.log(result);
+    console.log(result); // in result trovi l evento emesso dal contratto
   };
 
   onActorChange = (event) => {this.role= event.target.value;}

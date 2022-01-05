@@ -44,5 +44,12 @@ contract CovidSupplyChain {
         return (actors[_actor].id, actors[_actor].name, uint(actors[_actor].role)) ;
     }
 
+    // FUNZIONE AGGIUNGI BATCH
+
+
+    // FUNZIONE AGGIORNA LO STATO
+
+
+
 
 }
