@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import React, { Component } from 'react'
 import Web3 from 'web3'
 import CovidSupplyChain from "../CovidSupplyChain.json";
-
+import './timeline.css';
 
 class ManufacturerPage extends Component {
 
@@ -13,7 +13,7 @@ class ManufacturerPage extends Component {
   constructor() 
   {
     super();
-
+    this.res = {0:0,1:0};
     //altre campi (variabili globali) vanno inserite qui sotto
 
   }
@@ -34,6 +34,10 @@ class ManufacturerPage extends Component {
         CovidSupplyChain.networks[networkId] && CovidSupplyChain.networks[networkId].address 
       );
       
+      this.res = await this.CovidSupplyChain.methods.getTimeline(0).call();
+
+      //console.log(this.res);
+
       this.setState({loaded:true});
     } 
     catch (error) 
@@ -44,6 +48,17 @@ class ManufacturerPage extends Component {
   }
 
 
+  onSubmitForm = async () => {
+    //console.log(this.actor_name,this.role);
+
+    //chiamata in scrittura .send(indirizzo mittente) 
+    let result = await this.CovidSupplyChain.methods.addBatch().send({ from: this.state.account });
+    console.log(result); // in result trovi l evento emesso dal contratto
+
+  };
+
+
+
   //qui si stampa l html dinamico usando anche le varibili dichiarate sopra
   render() {
     return (
@@ -51,17 +66,35 @@ class ManufacturerPage extends Component {
 
       <div class="titolo"> 
         <p>Manufacturer Landing Page </p> 
-        <Link to="/" class="back"> Back to home</Link>
+        <Link to="/" class="back">&#8592; Back to home</Link>
       </div>
 
       <div class="homepage"> 
         <div class="page-content">          
-          content
+     
+          manufacturer
+
+
+            <p id="titolo" > Add batch:</p>
+            <form onSubmit={this.formSubmit}>
+              <button type="button" onClick={this.onSubmitForm}>Add Batch</button>
+            </form>
+
+            <br></br>
+            <p id="titolo" >Last batch on chain is:</p>
+
+            <ul>
+              {Array.from(this.res[0]).map( item => { return <li>{item}</li>;})}
+            </ul>
+
+            <ul>
+              {Array.from(this.res[1]).map( item => { return <li>{ new Date(item*1000).toUTCString() }</li>;})}
+            </ul>
+
         </div>
       </div>
-
+      
       </div>
-   
     );
   }
   

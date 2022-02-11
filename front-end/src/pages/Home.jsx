@@ -34,7 +34,7 @@ const HomePage = () => {
           <div class="column">
             <div class="card"> 
             <i class="material-icons" >manage_search</i><br></br>
-            <Link to="/manufacturer"  class="link" >Scan Section</Link></div>
+            <Link to="/scan"  class="link" >Scan Section</Link></div>
           </div>
           <div class="column">
             <div class="card"> 

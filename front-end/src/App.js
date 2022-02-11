@@ -12,7 +12,7 @@ import HubPage from './pages/Hub';
 import ManufacturerPage from './pages/Manufacturer';
 import HomePage from './pages/Home';
 import TestPage from './pages/test';
-
+import ScanPage from './pages/scan';
 
 class App extends Component {
 
@@ -67,6 +67,7 @@ class App extends Component {
             <Route exact path="/hub" element={<HubPage/>} > </Route>   
             <Route exact path="/facility" element={<FacilityPage/>}> </Route>   
             <Route exact path="/courier" element={<CourierPage/>} > </Route>
+            <Route exact path="/scan" element={<ScanPage/>} > </Route>
             <Route exact path="/test" element={<TestPage/>} > </Route>    
           </Routes>
 

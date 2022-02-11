@@ -13,7 +13,7 @@ class CourierPage extends Component {
   constructor() 
   {
     super();
-
+    this.batch_id=0;
     //altre campi (variabili globali) vanno inserite qui sotto
 
   }
@@ -43,6 +43,16 @@ class CourierPage extends Component {
     }
   }
 
+  onSubmitForm = async () => {
+    //console.log(this.actor_name,this.role);
+
+    //chiamata in scrittura .send(indirizzo mittente) 
+    let result = await this.CovidSupplyChain.methods.updateStatus (this.batch_id).send({ from: this.state.account });
+    console.log(result); // in result trovi l evento emesso dal contratto
+
+  };
+
+  onIdChange = (event) => {this.batch_id= event.target.value;}
 
   //qui si stampa l html dinamico usando anche le varibili dichiarate sopra
   render() {
@@ -56,7 +66,16 @@ class CourierPage extends Component {
 
       <div class="homepage"> 
         <div class="page-content">          
-          content
+          
+        <p id="titolo" > Add batch:</p>
+
+            Your Name: <input type="text" name="cost"  onChange={this.onIdChange}/> <br></br><br></br>
+
+            <form onSubmit={this.formSubmit}>
+              <button type="button" onClick={this.onSubmitForm}>Set to DELIVER_INTERNATIONAL</button>
+            </form>
+
+
         </div>
       </div>
 
