@@ -1,11 +1,15 @@
-import React, { Component } from 'react'
-import Web3 from 'web3'
-import './pages/css/App.css'
+// Main App page --> Dynamic top Navbar + React routes for multi-page layout.
+
+// import reactj + web3
+import React, { Component } from 'react';
+import { Routes, Route } from "react-router-dom";
+import Web3 from 'web3';
+import * as utils from "./pages/Utils.jsx";
+
+// import ABI 
 import CovidSupplyChain from "./CovidSupplyChain.json";
 
-
-import { Routes, Route, Link } from "react-router-dom";
-
+// import other pages (components)
 import CourierPage from './pages/Courier';
 import FacilityPage from './pages/Facilities';
 import HubPage from './pages/Hub';
@@ -14,21 +18,27 @@ import HomePage from './pages/Home';
 import AdminPage from './pages/Admin';
 import ScanPage from './pages/Scan';
 
+// import css
+import './pages/css/App.css'
+
+
 class App extends Component {
 
-  state = {account:"", loaded:false};
-
+  // Component constructor
   constructor() {
     super();
+    this.state = {
+      account:"",   // selected address from metamask
+      loaded:false  // flag to show loaded page
+    };
   }
 
-  componentDidMount = async () => {
 
+  // Connection to the blockchain
+  componentDidMount = async () => {
     try {
       const web3 = new Web3(window.web3.currentProvider)
-  
       const accounts = await web3.eth.getAccounts()
-      this.setState({ account: accounts[0] })
       const networkId = await web3.eth.net.getId();
 
       this.CovidSupplyChain = new web3.eth.Contract( 
@@ -36,24 +46,24 @@ class App extends Component {
         CovidSupplyChain.networks[networkId] && CovidSupplyChain.networks[networkId].address 
       );
 
+      this.setState({ account: accounts[0] })
       this.setState({loaded:true});
       
     } catch (error) {
-      alert(`Failed to load web3, accounts, or contract. Check console for details.`);
+      alert(utils.errorMessage);
       console.error(error);
     }
-
   }
 
 
+  // Render function
   render() {
 
     if (!this.state.loaded) {
-      return <div>Loading Web3, accounts, and contract...</div>;
+      return <div>Connecting to the blockchain, please wait...</div>;
     }
 
     return (
-
 
       <div className="container">
         <div className="navbar">
@@ -73,7 +83,6 @@ class App extends Component {
 
       </div>
 
-      
     );
   }
 

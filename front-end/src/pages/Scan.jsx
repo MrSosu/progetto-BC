@@ -1,51 +1,57 @@
-//You have to use the link component to link between you pages 
+// Scan page to retrieve timeline info about a vaccine batch
+
+// import reactj + web3
 import { Link } from "react-router-dom";
 import React, { Component } from 'react'
 import Web3 from 'web3'
-import CovidSupplyChain from "../CovidSupplyChain.json";
-import './css/timeline.css';
 import * as utils from "./Utils.jsx";
 
+// import ABI 
+import CovidSupplyChain from "../CovidSupplyChain.json";
+
+// import css
+import './css/timeline.css';
 
 
 class ScanPage extends Component {
 
-  state = {account:"", loaded:false};
-  // aggiungi al dizionario state quante piu informazioni vuoi
-
+  // component constructor
   constructor() 
   {
     super();
-    //this.res = {0:0,1:0};
-    //this.batch_id=0;
+
     this.state = {
-        res : {0:0,1:0,2:Array(),3:Array(),4:Array(),5:Array()},
-        batch_id : -1,
+        account:"",       // selected address from metamask
+        loaded:false ,    // flag to show loaded page
+        res : {           // query result
+          'size':0,
+          'temp':0,
+          'address':Array(),
+          'dates':Array(),
+          'names':Array(),
+          'roles':Array()},  
+        batch_id : -1,    // Entered batch ID
     };
-    //altre campi (variabili globali) vanno inserite qui sotto
 
   }
 
-  // qui ci si connette alla blockchain
-  componentDidMount = async () => {
-    try 
-    {
-      const web3 = new Web3(window.web3.currentProvider)
   
-      const accounts = await web3.eth.getAccounts()
-      this.setState({ account: accounts[0] })
-
+  // Connection to the blockchain
+  componentDidMount = async () => {
+    try {
+      const web3 = new Web3(window.web3.currentProvider)
       const networkId = await web3.eth.net.getId();
+      const accounts = await web3.eth.getAccounts()
 
       this.CovidSupplyChain = new web3.eth.Contract( 
         CovidSupplyChain.abi,
         CovidSupplyChain.networks[networkId] && CovidSupplyChain.networks[networkId].address 
       );
-      
+
+      this.setState({ account: accounts[0] })
       this.setState({loaded:true});
-    } 
-    catch (error) 
-    {
+
+    } catch (error) {
       alert(utils.errorMessage);
       console.error(error);
       document.location.href="/";
@@ -53,28 +59,35 @@ class ScanPage extends Component {
   }
 
 
-
+  // Query Form functions
   onIdChange = (event) => { this.setState({batch_id: event.target.value}); }
 
   onSubmitForm = async (event) => {
-    //console.log(this.actor_name,this.role);
+    try {
+      let res =  await this.CovidSupplyChain.methods.getTimeline(this.state.batch_id).call();
 
-    try{
-      this.setState( {res: await this.CovidSupplyChain.methods.getTimeline(this.state.batch_id).call()} );
-      this.state.res[2] = Array.from(this.state.res[2]);
-      this.state.res[3] = Array.from(this.state.res[3]);
-      this.state.res[4] = Array.from(this.state.res[4]);
-      this.state.res[5] = Array.from(this.state.res[5]);
-      console.log(this.state.res); 
-    }
-    catch{
+      this.state.res['size'] = res[0];
+      this.state.res['temp'] = res[1];
+      this.state.res['address'] = Array.from(res[2]);
+      this.state.res['dates'] = Array.from(res[3]);
+      this.state.res['names'] = Array.from(res[4]);
+      this.state.res['roles'] = Array.from(res[5]);
+
+      this.setState({batch_id:this.state.batch_id});
+    }catch {
+      // if batch id does not exist on chain..
       alert(utils.notFoundMessage);
     }
+  
+    // Scroll to the result
+    document.getElementById('timeline').scrollIntoView();
+    // Do not reload the page after form submission
     event.preventDefault();
+    
   };
 
 
-  //qui si stampa l html dinamico usando anche le varibili dichiarate sopra
+  // Render function
   render() {
     return (
       <div>
@@ -86,57 +99,62 @@ class ScanPage extends Component {
 
       <div class="homepage"> 
         <div class="page-content">          
-          
-        <div class="search_timeline">
-        <div class="vertical-center">
-          <h1>Search on the Supply Chain</h1>
-          <img class="globeimg" src="http://localhost:3000/images/w4.gif"></img>
 
-            <form onSubmit={this.formSubmit} >
-                <input type="text" name="cost" placeholder="Insert batch id" value={this.batch_id} onChange={this.onIdChange} />
+          <div class="search_timeline">
+            <div class="vertical-center">
+
+              <h1>Search on the Supply Chain</h1>
+              <img class="globeimg" src="http://localhost:3000/images/w4.gif"></img>
+
+              <form onSubmit={this.onSubmitForm} >
+                <input type="text" name="cost" placeholder="Insert batch id" onChange={this.onIdChange} />
                 <button class="button" type="button" onClick={this.onSubmitForm} >&#128269; Scan Batch</button>
-            </form>
+              </form>
 
             </div>
-        </div>
+          </div>
 
-        <div class="timeline_title">
+          <div id="timeline" class="timeline_title">
+            <h2>Vaccine Batch Timeline </h2> 
+            <p> ID: {this.state.batch_id}  <br></br> 
+                Size: {this.state.res[0]}  <br></br>
+                Temp: {this.state.res[1]}  </p>
+          </div>
 
-              <h2>Vaccine Batch Timeline </h2> 
-              <p>ID: {this.state.batch_id} <br></br> Size: {this.state.res[0]} <br></br> Temp: {this.state.res[1]} </p>
-        </div>
+          <div class="timeline">
 
-        <div class="timeline">
+            {/* for each entry obtained from query result on chain */}
+            { this.state.res['address'].map( (item,index) => { 
 
-          { this.state.res[2].map( (item,index) => { 
+                  {/* Left - Right visual style, a timeline card is generated for each status update */}
+                  return (index % 2 == 0) ? 
 
-                return (index % 2 == 0) ? 
-                    <div class="container_time left">
-                        <div class="content">
-                            <center> <h3> {utils.BatchStatus[index]} </h3> </center>
-                            <p>
-                                <b>Name:</b> {this.state.res[4][index]} <br></br>
-                                <b>Role:</b> {utils.ActorRoles[this.state.res[5][index]]} <br></br>
-                                <b>Address:</b> {item} <br></br> 
-                                <b>Timestamp:</b> {new Date(this.state.res[3][index]*1000).toUTCString()}
-                            </p>
-                        </div>
-                    </div>
-                    : <div class="container_time right">
-                        <div class="content">
-                            <center> <h3> {utils.BatchStatus[index]} </h3> </center>
-                            <p> 
-                                <b>Name:</b> {this.state.res[4][index]} <br></br>
-                                <b>Role:</b> {utils.ActorRoles[this.state.res[5][index]]} <br></br>
-                                <b>Address:</b> {item} <br></br> 
-                                <b>Timestamp:</b> {new Date(this.state.res[3][index]*1000).toUTCString()}
-                            </p>
-                        </div>
-                    </div> ;
-          })}
+                      <div class="container_time left">
+                          <div class="content">
+                              <center> <h3> {utils.BatchStatus[index]} </h3> </center>
+                              <p>
+                                  <b>Name:</b> {this.state.res['names'][index]} <br></br>
+                                  <b>Role:</b> {utils.ActorRoles[this.state.res['roles'][index]]} <br></br>
+                                  <b>Address:</b> {item} <br></br> 
+                                  <b>Timestamp:</b> {new Date(this.state.res['dates'][index]*1000).toUTCString()}
+                              </p>
+                          </div>
+                      </div>
 
-        </div>
+                      : <div class="container_time right">
+                          <div class="content">
+                              <center> <h3> {utils.BatchStatus[index]} </h3> </center>
+                              <p> 
+                                  <b>Name:</b> {this.state.res['names'][index]} <br></br>
+                                  <b>Role:</b> {utils.ActorRoles[this.state.res['roles'][index]]} <br></br>
+                                  <b>Address:</b> {item} <br></br> 
+                                  <b>Timestamp:</b> {new Date(this.state.res['dates'][index]*1000).toUTCString()}
+                              </p>
+                          </div>
+                      </div> ;
+            })}
 
+          </div>
 
         </div>
       </div>

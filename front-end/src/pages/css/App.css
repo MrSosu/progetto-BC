@@ -1,5 +1,12 @@
+/* Css file for general and common elements of the frontend */
 
+/* Font from google */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+
+html {
+  scroll-behavior: smooth;
+}
 
 .App {
   text-align: center;
@@ -13,7 +20,6 @@
   padding-top: 50px;
 }
 
-
 .navbar{
   top:0px;
   height:50px;
@@ -22,12 +28,14 @@
   padding-top: 25px;
   padding-bottom: 25px;
 }
+
 .navbar h1{
   margin:0;
   padding:0;
   font-size: 42px;
   color: #FFEFEF;
 }
+
 .navbar p{
   margin-top:-30px;
   margin-right:30px;
@@ -80,7 +88,6 @@
   font-family: 'Roboto', sans-serif;
 }
 
-
 .back{
   margin-top:-20px;
   margin-right:30px;
@@ -91,17 +98,18 @@
 }
 
 
+/* Responsive layout for mobile navbar */
+@media screen and (max-width: 1300px) {
 
-  /* Responsive columns - one column layout (vertical) on small screens */
-  @media screen and (max-width: 1300px) {
-    .navbar p {
-      margin-top:0;
-      margin-right:0;
-      float:None;
-      padding-top: 10px;
-    }
-
-    .navbar{
-      height:60px;
-    }
+  .navbar p {
+    margin-top:0;
+    margin-right:0;
+    float:None;
+    padding-top: 10px;
   }
+
+  .navbar{
+    height:60px;
+  }
+
+}

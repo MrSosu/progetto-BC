@@ -1,12 +1,15 @@
+/* Css file for home page and for the container of all the other pages */
 
+
+/* --- Common style for page-content scheleton --- */
 .homepage{
-    background-color: #F0F0F0;
-    margin-top:5px;
-    min-height: calc(100vh - (220px ));
-    display: table;
-    width: 100%;
-    display:flex;
-flex-direction:column;
+  background-color: #F0F0F0;
+  margin-top:5px;
+  min-height: calc(100vh - (220px ));
+  display: table;
+  width: 100%;
+  display:flex;
+  flex-direction:column;
 }
 
 .page-content{
@@ -14,52 +17,53 @@ flex-direction:column;
 }
 
 
-/* Float four columns side by side */
+/* --- Only for responsive homepage --- */
+
+/* Float 3 columns side by side */
 .column {
-    float: left;
-    width: 30%;
-    padding: 0 1.5%;
-    margin-top:20px;
+  float: left;
+  width: 30%;
+  padding: 0 1.5%;
+  margin-top:20px;
+  margin-bottom: 20px;
+}
+  
+.row {padding-top: 10px;}
+  
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+  
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* this adds the "card" effect */
+  padding: 16px;
+  text-align: center;
+  background-color: #D3DEDC;
+}
+  
+/* Responsive columns - one column layout (vertical) on small screens */
+/* Footer will disappear */
+@media screen and (max-width: 700px) {
+  .column {
+    width: 100%;
+    display: block;
     margin-bottom: 20px;
   }
-  
-  /* Remove extra left and right margins, due to padding in columns */
-  .row {padding-top: 10px;}
-  
-  /* Clear floats after the columns */
-  .row:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-  
-  /* Style the counter cards */
-  .card {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* this adds the "card" effect */
-    padding: 16px;
-    text-align: center;
-    background-color: #D3DEDC;
-  }
-  
-  /* Responsive columns - one column layout (vertical) on small screens */
-  @media screen and (max-width: 700px) {
-    .column {
-      width: 100%;
-      display: block;
-      margin-bottom: 20px;
-    }
-  }
+}
 
-  @media screen and (max-width: 1300px) and (min-width:700px) {
-    .column {
-      width: 47%;
-      display: block;
-      margin-bottom: 20px;
-    }
+@media screen and (max-width: 1300px) and (min-width:700px) {
+  .column {
+    width: 47%;
+    display: block;
+    margin-bottom: 20px;
   }
+}
 
-  @media screen and (max-width: 1300px) {
-    .footer {
-        display: None;
-    }
+@media screen and (max-width: 1300px) {
+  .footer {
+      display: None;
   }
+}

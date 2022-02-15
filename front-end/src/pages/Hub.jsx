@@ -66,18 +66,19 @@ class HubPage extends Component {
   }
 
 
+  // Query Form functions
+  onIdChange = (event) => {this.batch_id= event.target.value;}
+
   onSubmitForm = async () => {
-    try{
+    try
+    {
       let result = await this.CovidSupplyChain.methods.updateStatus (this.batch_id).send({ from: this.state.account });
       console.log(result); 
-    }
-    catch{
-      alert(utils.updateErrorMessage);
-    }
-
+      alert(utils.okMessage);
+    } 
+    catch{ alert(utils.updateErrorMessage); }
   };
 
-  onIdChange = (event) => {this.batch_id= event.target.value;}
 
 
   //qui si stampa l html dinamico usando anche le varibili dichiarate sopra

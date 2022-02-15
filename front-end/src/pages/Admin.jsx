@@ -1,44 +1,54 @@
-//You have to use the link component to link between you pages 
+// Administration Landing page
+
+// import reactj + web3
 import { Link} from "react-router-dom";
 import React, { Component } from 'react'
 import Web3 from 'web3'
-import CovidSupplyChain from "../CovidSupplyChain.json";
-import * as utils from "./Utils.jsx";
 
+// import ABI
+import CovidSupplyChain from "../CovidSupplyChain.json";
+
+// import css
 import './css/timeline.css';
 import './css/tables.css';
 import './css/App.css';
 
+// other import 
+import * as utils from "./Utils.jsx";
+
 
 class AdminPage extends Component {
 
-  state = {account:"", loaded:false};
-
+  // component constructor
   constructor() 
   {
     super();
 
-    this.actor = 1;
-    this.actor_name = "";
-    this.address ="";
-    this.res = {0:0,1:0,2:0};
+    this.state = {
+      account:"", 
+      loaded:false,
+      actor:0,
+      actor_name :"",
+      address:"",
+    };
   }
 
-  componentDidMount = async () => {
 
+  // Connection to the blockchain
+  componentDidMount = async () => {
     try {
       const web3 = new Web3(window.web3.currentProvider)
-  
-      const accounts = await web3.eth.getAccounts()
-      this.setState({ account: accounts[0] })
       const networkId = await web3.eth.net.getId();
+      const accounts = await web3.eth.getAccounts()
+
+      this.setState({ account: accounts[0] });
 
       this.CovidSupplyChain = new web3.eth.Contract( 
         CovidSupplyChain.abi,
         CovidSupplyChain.networks[networkId] && CovidSupplyChain.networks[networkId].address 
       );
 
-      //chiamata in lettura .call()
+      // Actor check, before page show up
       const res = await this.CovidSupplyChain.methods.getActor(this.state.account).call();
       if (res[2] != 5) { throw "You are not an admin!"; }
 
@@ -49,27 +59,26 @@ class AdminPage extends Component {
       console.error(error);
       document.location.href="/";
     }
-
   }
 
-  onSubmitForm = async () => {
-    try{
-      let result = await this.CovidSupplyChain.methods.addActor(this.address, this.actor_name,this.role).send({ from: this.state.account });
-      console.log(result); 
-    }
-    catch{
-      alert(utils.addErrorMessage);
-    }
 
+  // Query Form functions 
+  onActorChange = (event) => {this.state.role= event.target.value;}
+  onNameChange = (event) => {this.state.actor_name= event.target.value;}
+  onAddressChange = (event) => {this.state.address= event.target.value;}
+
+  onSubmitForm = async () => {
+    try
+    {
+      let result = await this.CovidSupplyChain.methods.addActor(this.state.address, this.state.actor_name,this.state.role).send({ from: this.state.account });
+      console.log(result); 
+      alert(utils.okMessage);
+    }
+    catch{ alert(utils.addErrorMessage); }
   };
 
-  onActorChange = (event) => {this.role= event.target.value;}
-  onNameChange = (event) => {this.actor_name= event.target.value;}
-  onAddressChange = (event) => {this.address= event.target.value;}
 
-
-
-
+  // Render function
   render() {
     return (
       <div>
@@ -100,15 +109,12 @@ class AdminPage extends Component {
                     <option value="5">Administrator</option>
                   </select>
 
-
                 <button type="button"class="bigbutton"  onClick={this.onSubmitForm}>Add Actor</button>
 
                 </form>
                 <br></br>
           </div>
 
-          
-      
         </div>
         </div>
 

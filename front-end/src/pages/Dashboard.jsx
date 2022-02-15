@@ -1,14 +1,23 @@
+// Dashboard for Courier, Facility, Hub, Manufaturer Page.
+// Re-usable code.
+
+// import css
 import './css/timeline.css';
 import './css/tables.css';
 import './css/App.css';
+
+// react router
 import { Link } from "react-router-dom";
 
+// other imports
 import * as utils from "./Utils.jsx";
 
 
+// generate the HTML dashboard when called
 export function dashboard(history)  {
     return (
         <div>
+            
         <br></br> <i class="material-icons" >account_circle </i> <br></br>
 
         <p id="table-title">History Dashboard</p>

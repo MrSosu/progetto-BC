@@ -1,6 +1,6 @@
 # Back-End Code
 
-Based on Truffle, Ganache and Ethereum.
+Project Based on Truffle, Ganache, Solidity and Ethereum.
 
 Blockchain config:
 - solc version: "0.8.10",
@@ -22,7 +22,7 @@ truffle migrate --reset
 
 ## To run Unit test
 ```
-[TODO]
+truffle test
 ```
 
 
