@@ -43,8 +43,9 @@ class HomePage extends Component {
     } 
     catch (error) 
     {
-      alert(`Failed to load web3, accounts, or contract. Check console for details.`);
+      alert(utils.errorMessage);
       console.error(error);
+      document.location.href="/";
     }
   }
 

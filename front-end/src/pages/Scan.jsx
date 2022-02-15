@@ -46,8 +46,9 @@ class ScanPage extends Component {
     } 
     catch (error) 
     {
-      alert(`Failed to load web3, accounts, or contract. Check console for details.`);
+      alert(utils.errorMessage);
       console.error(error);
+      document.location.href="/";
     }
   }
 
@@ -58,12 +59,17 @@ class ScanPage extends Component {
   onSubmitForm = async (event) => {
     //console.log(this.actor_name,this.role);
 
-    this.setState( {res: await this.CovidSupplyChain.methods.getTimeline(this.state.batch_id).call()} );
-    this.state.res[2] = Array.from(this.state.res[2]);
-    this.state.res[3] = Array.from(this.state.res[3]);
-    this.state.res[4] = Array.from(this.state.res[4]);
-    this.state.res[5] = Array.from(this.state.res[5]);
-    console.log(this.state.res); 
+    try{
+      this.setState( {res: await this.CovidSupplyChain.methods.getTimeline(this.state.batch_id).call()} );
+      this.state.res[2] = Array.from(this.state.res[2]);
+      this.state.res[3] = Array.from(this.state.res[3]);
+      this.state.res[4] = Array.from(this.state.res[4]);
+      this.state.res[5] = Array.from(this.state.res[5]);
+      console.log(this.state.res); 
+    }
+    catch{
+      alert(utils.notFoundMessage);
+    }
     event.preventDefault();
   };
 

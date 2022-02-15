@@ -10,7 +10,7 @@ import './css/tables.css';
 import './css/App.css';
 
 import * as utils from "./Utils.jsx";
-
+import * as dashboard from "./Dashboard.jsx";
 
 class HubPage extends Component {
 
@@ -51,22 +51,29 @@ class HubPage extends Component {
       this.state.history['sizes'] = Array.from(batch[2]);
       this.state.history['temps'] = Array.from(batch[3]);
 
+
+      const res = await this.CovidSupplyChain.methods.getActor(this.state.account).call();
+      if ((res[2] != 4)) { throw "You are not an Hub!"; }
+
       this.setState({loaded:true});
     } 
     catch (error) 
     {
-      alert(`Failed to load web3, accounts, or contract. Check console for details.`);
+      alert(utils.errorMessage);
       console.error(error);
+      document.location.href="/";
     }
   }
 
 
   onSubmitForm = async () => {
-    //console.log(this.actor_name,this.role);
-
-    //chiamata in scrittura .send(indirizzo mittente) 
-    let result = await this.CovidSupplyChain.methods.updateStatus (this.batch_id).send({ from: this.state.account });
-    console.log(result); // in result trovi l evento emesso dal contratto
+    try{
+      let result = await this.CovidSupplyChain.methods.updateStatus (this.batch_id).send({ from: this.state.account });
+      console.log(result); 
+    }
+    catch{
+      alert(utils.updateErrorMessage);
+    }
 
   };
 
@@ -86,30 +93,7 @@ class HubPage extends Component {
         <div class="homepage"> 
           <div class="page-content">          
 
-          <br></br> <i class="material-icons" >account_circle </i> <br></br>
-
-          <p id="table-title">History Dashboard</p>
-
-          <table class="fl-table">
-          <tbody>
-            <tr>
-              <th> Batch ID </th>
-              <th> Batch Status </th>
-              <th> Batch Temp° </th>
-              <th> Batch Size </th>
-              <th> Search </th>
-            </tr>
-            {this.state.history['ids'].map((id,index) => (
-            <tr>
-              <td> {utils.pad(id,8)} </td>
-              <td> {utils.BatchStatus[this.state.history['status'][index]]} </td>
-              <td> {this.state.history['temps'][index]} </td>
-              <td> {this.state.history['sizes'][index]} </td>
-              <td> <Link to="/scan" class="link"> &#128269;</Link> </td>
-            </tr>
-            ))}
-          </tbody>
-          </table>
+          { dashboard.dashboard(this.state.history) }
 
           <div class="action">
               <p id="table-title"> Update Batch Status</p>

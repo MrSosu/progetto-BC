@@ -39,14 +39,13 @@ class AdminPage extends Component {
       );
 
       //chiamata in lettura .call()
-      this.res = await this.CovidSupplyChain.methods.getActor(this.state.account).call();
-      console.log(this.res);
-      if (this.res[2] != 5) { throw "You are not an admin!"; }
+      const res = await this.CovidSupplyChain.methods.getActor(this.state.account).call();
+      if (res[2] != 5) { throw "You are not an admin!"; }
 
       this.setState({loaded:true});
       
     } catch (error) {
-      alert(`An error has occured while connecting to the blockchain. Check console for details.`);
+      alert(utils.errorMessage);
       console.error(error);
       document.location.href="/";
     }
@@ -54,11 +53,14 @@ class AdminPage extends Component {
   }
 
   onSubmitForm = async () => {
-    console.log(this.actor_name,this.role,this.address);
+    try{
+      let result = await this.CovidSupplyChain.methods.addActor(this.address, this.actor_name,this.role).send({ from: this.state.account });
+      console.log(result); 
+    }
+    catch{
+      alert(utils.addErrorMessage);
+    }
 
-    //chiamata in scrittura .send(indirizzo mittente) 
-    let result = await this.CovidSupplyChain.methods.addActor(this.address, this.actor_name,this.role).send({ from: this.state.account });
-    console.log(result); // in result trovi l evento emesso dal contratto
   };
 
   onActorChange = (event) => {this.role= event.target.value;}
