@@ -8,7 +8,7 @@ contract("CovidSupplyChain", accounts => {
         const actorName = "Pzifer";
         const actorRole = 0;
 
-        const result = await CSC.addActor(actorName, actorRole, { from: accounts[1] });
+        const result = await CSC.addActor(accounts[1], actorName, actorRole, { from: accounts[0] });
         const actor =  await CSC.getActor(accounts[1]);
 
         //console.log(result.logs[0].args)
@@ -24,8 +24,8 @@ contract("CovidSupplyChain", accounts => {
     it("... should correctly add a new batch.", async () => {
         const CSC = await CovidSupplyChain.deployed();
         //const res_actor = await CSC.addActor("Pzifer", 0, { from: accounts[1] });
-        const res_batch = await CSC.addBatch({ from: accounts[1] });
-        const memo = await CSC.batches(0);
+        const res_batch = await CSC.addBatch(-4,256,{ from: accounts[1] });
+        //const memo = await CSC.batches(0);
 
         //console.log(res_batch.logs[0].args);
         //console.log(memo)
@@ -38,13 +38,11 @@ contract("CovidSupplyChain", accounts => {
 
         const res_actor = await CSC.addActor("UPS Logistics", 1, { from: accounts[2] });
 
-        const res_batch = await CSC.addBatch({ from: accounts[1] });
-        const memo = await CSC.batches(0);
-        const id_inserted = memo['status'].toNumber()
+        const res_batch = await CSC.addBatch(-4,256,{ from: accounts[1] });
+
+        const id_inserted = 0; //ripescare da sopra
 
         const res_batch2 = await CSC.updateStatus( id_inserted, { from: accounts[2] });
-        const memo2 = await CSC.batches(0);
-        const id_updated = memo2['status'].toNumber()
 
         //console.log( id_inserted, id_updated );
     });
@@ -53,16 +51,25 @@ contract("CovidSupplyChain", accounts => {
     it("... should correctly update status batch.", async () => {
         const CSC = await CovidSupplyChain.deployed();
 
-        const memo = await CSC.batches(0);
         //console.log(memo)
 
         const time = await CSC.getTimeline(0);
-        console.log(time);
+        //console.log(time);
 
-        var newDate = new Date(time['1'][0].toNumber()*1000);
+        var newDate = new Date(time['3'][0].toNumber()*1000);
         dateString = newDate.toUTCString();
-        console.log(dateString);
-        console.log(time['1'][0].toNumber())
+        //console.log(dateString);
+        //console.log(time['1'][0].toNumber())
+
+    });
+
+    // Unit test 5: Retrieve my last n batch
+    it("... should correctly retrieve my batch.", async () => {
+        const CSC = await CovidSupplyChain.deployed();
+
+        const memo = await CSC.getMyLastNBatch(3, accounts[1], { from: accounts[1] });
+        console.log(memo);
+        console.log(memo['1'][0].toNumber());
 
     });
 

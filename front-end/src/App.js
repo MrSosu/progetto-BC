@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Web3 from 'web3'
-import './App.css'
+import './pages/css/App.css'
 import CovidSupplyChain from "./CovidSupplyChain.json";
 
 
@@ -11,8 +11,8 @@ import FacilityPage from './pages/Facilities';
 import HubPage from './pages/Hub';
 import ManufacturerPage from './pages/Manufacturer';
 import HomePage from './pages/Home';
-import TestPage from './pages/test';
-import ScanPage from './pages/scan';
+import AdminPage from './pages/Admin';
+import ScanPage from './pages/Scan';
 
 class App extends Component {
 
@@ -55,8 +55,8 @@ class App extends Component {
     return (
 
 
-      <div class="container">
-        <div class="navbar">
+      <div className="container">
+        <div className="navbar">
           <h1>Covid-19 Supply Chain</h1>
           <p>Account: {this.state.account}</p>
         </div>
@@ -68,7 +68,7 @@ class App extends Component {
             <Route exact path="/facility" element={<FacilityPage/>}> </Route>   
             <Route exact path="/courier" element={<CourierPage/>} > </Route>
             <Route exact path="/scan" element={<ScanPage/>} > </Route>
-            <Route exact path="/test" element={<TestPage/>} > </Route>    
+            <Route exact path="/admin" element={<AdminPage/>} > </Route>    
           </Routes>
 
       </div>
