@@ -30,6 +30,7 @@ class AdminPage extends Component {
       actor:0,
       actor_name :"",
       address:"",
+      role:0,
     };
   }
 
