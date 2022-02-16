@@ -15,6 +15,7 @@ import './css/timeline.css';
 
 class ScanPage extends Component {
 
+  
   // component constructor
   constructor() 
   {
@@ -40,8 +41,8 @@ class ScanPage extends Component {
   componentDidMount = async () => {
     try {
       const web3 = new Web3(window.web3.currentProvider)
+      const accounts = await web3.eth.getAccounts();
       const networkId = await web3.eth.net.getId();
-      const accounts = await web3.eth.getAccounts()
 
       this.CovidSupplyChain = new web3.eth.Contract( 
         CovidSupplyChain.abi,
@@ -117,8 +118,8 @@ class ScanPage extends Component {
           <div id="timeline" class="timeline_title">
             <h2>Vaccine Batch Timeline </h2> 
             <p> ID: {this.state.batch_id}  <br></br> 
-                Size: {this.state.res[0]}  <br></br>
-                Temp: {this.state.res[1]}  </p>
+                Size: {this.state.res['size']}  <br></br>
+                Temp: {this.state.res['temp']}  </p>
           </div>
 
           <div class="timeline">

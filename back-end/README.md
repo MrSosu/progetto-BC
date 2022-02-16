@@ -19,6 +19,7 @@ truffle compile
 ```
 truffle migrate --reset
 ```
+Every time you will change the contract code and re-compile + re-deploy, you have to copy the compiled contract ABI file into the frontend folder.
 
 ## To run Unit test
 ```

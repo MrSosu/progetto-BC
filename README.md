@@ -4,7 +4,7 @@
 
 Made by Andrea Trianni and Marco Adriani.
 
-The project folder sare organized in this wa:
+The project folder are organized in this way:
 
 ## Deliverables
 Contatins the UML diagrams, the slide presentation and the final written report.

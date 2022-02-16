@@ -39,16 +39,15 @@ class HomePage extends Component {
     {
       const web3 = new Web3(window.web3.currentProvider)
       const networkId = await web3.eth.net.getId();
-      const accounts = await web3.eth.getAccounts()
+      const accounts = await web3.eth.getAccounts();
 
       this.CovidSupplyChain = new web3.eth.Contract( 
         CovidSupplyChain.abi,
         CovidSupplyChain.networks[networkId] && CovidSupplyChain.networks[networkId].address 
       );
 
-      this.setState({ account: accounts[0] })
+      this.setState({ account: accounts[0] });
       this.state.actor = await this.CovidSupplyChain.methods.getActor(this.state.account).call();
-      
       this.setState({loaded:true});
     } 
     catch (error) 
